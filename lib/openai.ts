@@ -1,6 +1,4 @@
-cd C:\li-post-analyzer
-mkdir lib -Force | Out-Null
-@'
+// C:\li-post-analyzer\lib\openai.ts
 export async function chatComplete({
   userKey,
   system,
@@ -17,7 +15,8 @@ export async function chatComplete({
   max_tokens?: number;
 }) {
   if (!userKey) throw new Error("Missing OpenAI key");
-  const r = await fetch("https://api.openai.com/v1/chat/completions", {
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${userKey}`,
@@ -33,11 +32,12 @@ export async function chatComplete({
       max_tokens,
     }),
   });
-  if (!r.ok) {
-    const t = await r.text();
+
+  if (!res.ok) {
+    const t = await res.text();
     throw new Error(`OpenAI error: ${t}`);
   }
-  const j = await r.json();
-  return j.choices?.[0]?.message?.content?.trim() ?? "";
+
+  const j = await res.json();
+  return j?.choices?.[0]?.message?.content?.trim() ?? "";
 }
-'@ | Set-Content -Encoding UTF8 .\lib\openai.ts
