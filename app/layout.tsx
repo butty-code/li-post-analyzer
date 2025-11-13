@@ -1,8 +1,8 @@
  // ======================= C:\li-post-analyzer\app\layout.tsx =======================
-import KeyBadge from "./components/KeyBadge";
-import RefBadge from "./components/RefBadge";
-import "./globals.css";
 
+import RefBadge from "./components/RefBadge";
+import KeyBadge from "./components/KeyBadge";
+import "./globals.css";
 export const metadata = {
   title: "AI-Powered LinkedIn Post Analyzer",
   description: "Summarize, explain, improve. IE/UK packs. Batch mode. BYOK.",
