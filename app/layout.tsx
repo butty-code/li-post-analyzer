@@ -1,7 +1,8 @@
-// ======================= C:\li-post-analyzer\app\layout.tsx =======================
+// C:\li-post-analyzer\app\layout.tsx
+import "./globals.css";
+import Link from "next/link";
 import KeyBadge from "./components/KeyBadge";
 import RefBadge from "./components/RefBadge";
-import "./globals.css";
 
 export const metadata = {
   title: "AI-Powered LinkedIn Post Analyzer",
@@ -18,16 +19,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <h1 className="h1">AI-Powered LinkedIn Post Analyzer</h1>
               <div className="sub">Summarize, explain, improve. IE/UK packs. Batch mode.</div>
             </div>
+
+            {/* NAV: use Link, badges as separate elements */}
             <nav className="nav">
-              <a href="/">Home</a>
-              <a href="/help">Help</a>
-              <a href="/settings">Settings</a>   {/* <- correct */}
-              <a href="/referrals">Referrals</a> {/* <- correct */}
+              <Link className="nav-link" href="/">Home</Link>
+              <Link className="nav-link" href="/help">Help</Link>
+              <Link className="nav-link" href="/settings">Settings</Link>
+              <Link className="nav-link" href="/referrals">Referrals</Link>
               <RefBadge />
               <KeyBadge />
             </nav>
           </header>
+
           {children}
+
           <div style={{ height: 24 }} />
           <div className="sub">© {new Date().getFullYear()} – Local demo. No data stored.</div>
         </div>
@@ -35,5 +40,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
-
-

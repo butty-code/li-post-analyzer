@@ -62,3 +62,19 @@ pre{white-space:pre-wrap;margin:0;font-family:ui-monospace,SFMono-Regular,Consol
 .answer pre{background:transparent;color:#fff;font-family:ui-sans-serif,system-ui,Segoe UI,Inter,Roboto,Arial;line-height:1.55;font-size:16px;max-width:72ch}
 .answer .btn-ghost{background:#0f0f0f;border:1px solid #333;color:#fff}
 .answer .btn-outline{border:1px solid #444;color:#fff}
+/* Ensure nav items are on top and individually clickable */
+.nav { position: relative; z-index: 1; display:flex; gap:12px; align-items:center }
+.nav-link { font-weight:700; padding:8px 12px; border-radius:10px; border:1px solid #1a2432; background:#0e1520; color:inherit; text-decoration:none }
+.nav-link:hover{ border-color:#2a3a4f }
+
+.badge-link { text-decoration:none }
+.badge {
+  display:inline-flex; align-items:center; gap:6px; padding:6px 10px;
+  border-radius:999px; font-weight:700; border:1px solid #1a2432; position:relative; z-index:2;
+}
+.badge .dot { width:8px; height:8px; border-radius:50%; background:#4da3ff }
+.ref-badge { background:#0e1520; color:#a7b3c7 }
+.key-badge.ok { background:#0e1a0e; color:#9BE29B; border-color:#204a20 }
+.key-badge.ok .dot { background:#22c55e }
+.key-badge.missing { background:#1a0e0e; color:#ffb0b0; border-color:#4a2020 }
+.key-badge.missing .dot { background:#ef4444 }

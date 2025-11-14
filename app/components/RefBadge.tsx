@@ -1,5 +1,6 @@
 // C:\li-post-analyzer\app\components\RefBadge.tsx
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type RefLog = { ts:number; path:string; ref?:string; ua?:string };
@@ -28,15 +29,11 @@ export default function RefBadge(){
   },[]);
   if(!code) return null;
   return (
-    <a href="/referrals" title="View referral logs" style={{textDecoration:"none"}}>
-      <span style={{
-        display:"inline-flex",alignItems:"center",gap:6,padding:"6px 10px",
-        borderRadius:999,fontWeight:700,border:"1px solid #1a2432",
-        background:"#0e1520",color:"#a7b3c7"
-      }}>
-        <span style={{width:8,height:8,borderRadius:4,background:"#4da3ff"}}/>
+    <Link href="/referrals" className="badge-link" title="View referral logs">
+      <span className="badge ref-badge">
+        <span className="dot" />
         {`Ref: ${code}`}
       </span>
-    </a>
+    </Link>
   );
 }
