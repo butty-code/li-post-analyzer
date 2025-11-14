@@ -78,3 +78,19 @@ pre{white-space:pre-wrap;margin:0;font-family:ui-monospace,SFMono-Regular,Consol
 .key-badge.ok .dot { background:#22c55e }
 .key-badge.missing { background:#1a0e0e; color:#ffb0b0; border-color:#4a2020 }
 .key-badge.missing .dot { background:#ef4444 }
+/* Ensure nav elements are individually clickable; badges not overlapping links */
+.nav { position: relative; z-index: 1; display:flex; gap:12px; align-items:center }
+.nav-link { font-weight:700; padding:8px 12px; border-radius:10px; border:1px solid #1a2432; background:#0e1520; color:inherit; text-decoration:none }
+.nav-link:hover{ border-color:#2a3a4f }
+
+.badge-link { text-decoration:none }
+.badge { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-weight:700; border:1px solid #1a2432; position:relative; z-index:2; }
+.badge .dot { width:8px; height:8px; border-radius:50%; background:#4da3ff }
+.ref-badge { background:#0e1520; color:#a7b3c7 }
+.key-badge.ok { background:#0e1a0e; color:#9BE29B; border-color:#204a20 }
+.key-badge.ok .dot { background:#22c55e }
+.key-badge.missing { background:#1a0e0e; color:#ffb0b0; border-color:#4a2020 }
+.key-badge.missing .dot { background:#ef4444 }
+
+/* Buttons: disabled style */
+button:disabled{ opacity:.7; cursor:not-allowed }
