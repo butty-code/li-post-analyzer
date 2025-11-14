@@ -1,5 +1,7 @@
+// C:\li-post-analyzer\app\referrals\page.tsx
 "use client";
 import { useEffect, useState } from "react";
+
 type Log = { ts:number; path:string; ref?:string; ua?:string };
 
 export default function ReferralsPage(){
@@ -11,7 +13,7 @@ export default function ReferralsPage(){
       setRefCode(localStorage.getItem("ref_code")||"");
       const arr:Log[] = JSON.parse(localStorage.getItem("ref_logs")||"[]");
       setLogs(arr.slice(-500).reverse());
-    }catch{}
+    }catch{ /* ignore */ }
   },[]);
 
   function download(){
@@ -60,4 +62,3 @@ export default function ReferralsPage(){
     </main>
   );
 }
-
