@@ -1,64 +1,65 @@
-// C:\li-post-analyzer\app\referrals\page.tsx
+// ======================= C:\li-post-analyzer\app\page.tsx (ONLY if you still miss key-warnings) =======================
 "use client";
 import { useEffect, useState } from "react";
 
-type Log = { ts:number; path:string; ref?:string; ua?:string };
+/* utils */
+function copyText(s: string){ if(navigator.clipboard?.writeText) return navigator.clipboard.writeText(s); const ta=document.createElement("textarea"); ta.value=s; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); }
+function downloadTxt(filename:string,text:string){ const blob=new Blob([text],{type:"text/plain;charset=utf-8"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url); }
+function getUserKey(){ try{ return localStorage.getItem("user_openai_api_key")||""; }catch{ return ""; } }
 
-export default function ReferralsPage(){
-  const [logs,setLogs] = useState<Log[]>([]);
-  const [refCode,setRefCode] = useState<string>("");
+/* share helpers */
+function encodeShare(payload:unknown){ return `${location.origin}#s=${btoa(unescape(encodeURIComponent(JSON.stringify(payload))))}`; }
+function decodeShare(hash:string):any|null{ try{ const m=hash.match(/#s=([^&]+)/); if(!m) return null; const json=decodeURIComponent(escape(atob(m[1]))); return JSON.parse(json); }catch{ return null; } }
 
-  useEffect(()=>{
-    try{
-      setRefCode(localStorage.getItem("ref_code")||"");
-      const arr:Log[] = JSON.parse(localStorage.getItem("ref_logs")||"[]");
-      setLogs(arr.slice(-500).reverse());
-    }catch{ /* ignore */ }
-  },[]);
-
-  function download(){
-    const header = "ts_iso,ref,path,ua\n";
-    const rows = logs.map(l => {
-      const iso = new Date(l.ts).toISOString();
-      const ref = (l.ref||"").replace(/"/g,'""');
-      const path = (l.path||"").replace(/"/g,'""');
-      const ua = (l.ua||"").replace(/"/g,'""');
-      return `"${iso}","${ref}","${path}","${ua}"`;
-    }).join("\n");
-    const blob = new Blob([header+rows], {type:"text/csv;charset=utf-8"});
-    const url = URL.createObjectURL(blob); const a=document.createElement("a");
-    a.href=url; a.download="referrals.csv"; a.click(); URL.revokeObjectURL(url);
-  }
-
-  function clearLogs(){
-    localStorage.removeItem("ref_logs");
-    setLogs([]);
-  }
-
+/* loud banner */
+function Banner({ kind="info", text, onClose }:{kind?: "info"|"ok"|"err"; text: string; onClose: ()=>void}){
+  const bg = kind==="ok" ? "#0e1a0e" : kind==="err" ? "#2a1212" : "#0e1520";
+  const bd = kind==="ok" ? "#204a20" : kind==="err" ? "#5a2a2a" : "#1a2432";
+  const fg = kind==="ok" ? "#9BE29B" : kind==="err" ? "#ffb0b0" : "#a7b3c7";
   return (
-    <main className="grid" style={{gridTemplateColumns:"1fr", gap:16}}>
-      <section className="card">
-        <h2 style={{marginTop:0}}>Referrals</h2>
-        <div className="sub">Ref code: <b>{refCode || "—"}</b>. Logs are stored locally in your browser.</div>
-        <div className="row" style={{gap:10, marginTop:10}}>
-          <button className="btn btn-outline" onClick={download} disabled={!logs.length}>Download CSV</button>
-          <button className="btn btn-ghost" onClick={clearLogs} disabled={!logs.length}>Clear</button>
-        </div>
-      </section>
+    <div className="row" style={{background:bg,border:`1px solid ${bd}`,color:fg,borderRadius:10,padding:10,justifyContent:"space-between"}}>
+      <div style={{whiteSpace:"pre-wrap"}}>{text}</div>
+      <button className="btn btn-outline" onClick={onClose}>Close</button>
+    </div>
+  );
+}
 
+/* API call wrapper */
+async function call(p:string,b:any){
+  const key=getUserKey(); 
+  if(!key) throw new Error("No OpenAI key set. Go to Settings and paste your key, then click Test.");
+  const r=await fetch(p,{method:"POST",headers:{"Content-Type":"application/json","x-openai-key":key},body:JSON.stringify(b)});
+  let body: any = null;
+  try{ body = await r.json(); }catch{ body = await r.text(); }
+  if(!r.ok){
+    const msg = typeof body==="string" ? body : (body?.error || body?.message || JSON.stringify(body));
+    throw new Error(`Request failed (${r.status}): ${msg}`);
+  }
+  return body;
+}
+
+/* components and analyzers — use your latest working version (omitted for brevity) */
+// Keep your SingleAnalyzer/BatchAnalyzer from the last working patch,
+// they already use Banner + safeRun. Ensure they render Banner at top,
+// and call() is used for every API call so missing key shows clearly.
+
+export default function Page(){
+  const [showKeyWarn,setShowKeyWarn] = useState(false);
+  useEffect(()=>{ setShowKeyWarn(!getUserKey()); },[]);
+  return(
+    <main style={{display:"grid",gap:16}}>
       <section className="card">
-        <h3>Recent events</h3>
-        {logs.length===0 ? <div className="sub">No logs yet.</div> :
-          <div className="block" style={{maxHeight:400, overflow:"auto"}}>
-            {logs.map((l,i)=>(
-              <div key={i} style={{padding:"6px 0", borderBottom:"1px solid #1a2432"}}>
-                <div className="sub">{new Date(l.ts).toLocaleString()}</div>
-                <pre>{JSON.stringify(l, null, 2)}</pre>
-              </div>
-            ))}
-          </div>
-        }
+        <h2 style={{marginTop:0}}>AI-Powered LinkedIn Post Analyzer</h2>
+        <div className="sub">Copy intake, generate share links, and run single or batch packs.</div>
       </section>
+      {showKeyWarn && (
+        <Banner
+          kind="err"
+          text={`No OpenAI key set. Go to Settings and paste your key, then click Test.`}
+          onClose={()=>setShowKeyWarn(false)}
+        />
+      )}
+      {/* Render SingleAnalyzer and BatchAnalyzer here (your existing code) */}
     </main>
   );
 }

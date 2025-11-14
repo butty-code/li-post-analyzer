@@ -1,8 +1,8 @@
- // ======================= C:\li-post-analyzer\app\layout.tsx =======================
-
-import RefBadge from "./components/RefBadge";
+// ======================= C:\li-post-analyzer\app\layout.tsx =======================
 import KeyBadge from "./components/KeyBadge";
+import RefBadge from "./components/RefBadge";
 import "./globals.css";
+
 export const metadata = {
   title: "AI-Powered LinkedIn Post Analyzer",
   description: "Summarize, explain, improve. IE/UK packs. Batch mode. BYOK.",
@@ -21,8 +21,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <nav className="nav">
               <a href="/">Home</a>
               <a href="/help">Help</a>
-              <a href="/settings">Settings</a>
-              <a href="/referrals">Referrals</a>
+              <a href="/settings">Settings</a>   {/* <- correct */}
+              <a href="/referrals">Referrals</a> {/* <- correct */}
               <RefBadge />
               <KeyBadge />
             </nav>
@@ -35,4 +35,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
 
